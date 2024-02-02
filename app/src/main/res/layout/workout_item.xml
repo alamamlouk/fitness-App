@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:id="@+id/MainNewsRv">
         <ImageView
-            android:id="@+id/MainNewsImageView"
+            android:id="@+id/workOutImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:contentDescription="abs"
@@ -34,6 +34,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Abs"
+              android:id="@+id/workOutName"
               android:textColor="@color/white"
               android:textSize="20dp"/>
           <TextView
@@ -41,12 +42,14 @@
               android:layout_height="wrap_content"
               android:textColor="@color/white"
               android:textSize="9dp"
+              android:id="@+id/nbExercises"
               android:text="10 Exercices"/>
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="@color/white"
               android:textSize="9dp"
+              android:id="@+id/timeToFinish"
               android:text="20 MN"/>
       </LinearLayout>
     </RelativeLayout>
