@@ -1,0 +1,70 @@
+<!-- res/layout/widget_layout.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!-- finishedWorkOut -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/finishedWorkOutCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- inProgress -->
+    <LinearLayout
+        android:id="@+id/WidgetInProgress"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/inProgressCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <!-- timeSpent -->
+    <LinearLayout
+        android:id="@+id/WidgetTimeSpent"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/timeSpentMinutesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+        <!-- Your content for timeSpent goes here -->
+
+    </LinearLayout>
+</LinearLayout>

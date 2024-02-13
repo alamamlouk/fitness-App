@@ -10,17 +10,24 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.fitnessapp.Fragments.ActivityFragment;
+import com.example.fitnessapp.Fragments.DashboardFragment;
+import com.example.fitnessapp.Fragments.HomeFragment;
+import com.example.fitnessapp.Fragments.SettingFragment;
+import com.example.fitnessapp.Services.ActivityServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bottomNavigationView=findViewById(R.id.navigationBar);
         frameLayout=findViewById(R.id.frameLayout);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

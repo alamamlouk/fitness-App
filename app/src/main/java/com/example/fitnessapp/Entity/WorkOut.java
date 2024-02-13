@@ -1,4 +1,4 @@
-package com.example.fitnessapp;
+package com.example.fitnessapp.Entity;
 
 public class WorkOut {
     private int workoutImg, WorkOutTime,numberOfExercises;
