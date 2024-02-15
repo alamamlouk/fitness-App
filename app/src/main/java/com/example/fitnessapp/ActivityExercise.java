@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityExercise extends AppCompatActivity {
-    private ArrayList<ExerciseDTO>exerciseArrayList=new ArrayList<>();
-    private ExerciseServices exerciseServices=new ExerciseServices(this);
-    private RelationServices relationServices=new RelationServices(this);
+    private final RelationServices relationServices=new RelationServices(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +30,11 @@ public class ActivityExercise extends AppCompatActivity {
         long data = receivedIntent.getLongExtra("activityId",0);
         RecyclerView recyclerView=findViewById(R.id.exercises);
         relationServices.open();
-        List<Long> longList=new ArrayList<>();
         List<Exercise>exerciseList=new ArrayList<>();
-        longList=relationServices.getExercisesByActivity(data);
-        exerciseServices.open();
-        for (long i:longList){
-            exerciseList.add(exerciseServices.getActivityExercise(i));
-        }
-        ExerciseAdapter exerciseAdapter=new ExerciseAdapter(exerciseList,this);
+        exerciseList=relationServices.getExercisesByActivity(data);
+        ExerciseAdapter exerciseAdapter=new ExerciseAdapter(exerciseList,this,data);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(exerciseAdapter);
-        exerciseServices.close();
         relationServices.close();
     }
 }

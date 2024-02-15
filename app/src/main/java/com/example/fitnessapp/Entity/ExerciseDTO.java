@@ -3,16 +3,17 @@ package com.example.fitnessapp.Entity;
 public class ExerciseDTO {
     private String exercise_name;
     private int time_to_finish;
-    private boolean state;
+    private int reputation;
 
-    public ExerciseDTO(String exercise_name, int time_to_finish, boolean state) {
+    private String exercise_description;
+    private String exercise_path_image;
+
+    public ExerciseDTO(String exercise_name, int time_to_finish, int reputation, String exercise_description, String exercise_path_image) {
         this.exercise_name = exercise_name;
         this.time_to_finish = time_to_finish;
-        this.state = state;
-    }
-
-    public ExerciseDTO() {
-
+        this.reputation = reputation;
+        this.exercise_description = exercise_description;
+        this.exercise_path_image = exercise_path_image;
     }
 
     public String getExercise_name() {
@@ -31,11 +32,27 @@ public class ExerciseDTO {
         this.time_to_finish = time_to_finish;
     }
 
-    public boolean getState() {
-        return state;
+    public int getReputation() {
+        return reputation;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
+    }
+
+    public String getExercise_description() {
+        return exercise_description;
+    }
+
+    public void setExercise_description(String exercise_description) {
+        this.exercise_description = exercise_description;
+    }
+
+    public String getExercise_path_image() {
+        return exercise_path_image;
+    }
+
+    public void setExercise_path_image(String exercise_path_image) {
+        this.exercise_path_image = exercise_path_image;
     }
 }

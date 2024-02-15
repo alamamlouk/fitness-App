@@ -21,7 +21,6 @@ public class Stats extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.finishedWorkOutCountTextView, String.valueOf(finishedWorkOutCount));
             remoteViews.setTextViewText(R.id.inProgressCountTextView, String.valueOf(inProgressCount));
             remoteViews.setTextViewText(R.id.timeSpentMinutesTextView, String.valueOf(timeSpentMinutes));
-
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
     }
@@ -29,35 +28,32 @@ public class Stats extends AppWidgetProvider {
     private int getFinishedWorkOutCount(Context context) {
         activityServices=new ActivityServices(context);
         activityServices.open();
-        int number= activityServices.getNumberOfActivityFinished();
+        int number=activityServices.getCompletedActivitiesCount();
         activityServices.close();
         return number;
-         // Example value
     }
 
     private long getInProgressCount(Context context) {
         activityServices=new ActivityServices(context);
         activityServices.open();
-        long number= activityServices.getNumberOfExercisesInProgress();
+        int number=activityServices.getActivitiesWithTimeExercisedGreaterThanZeroCount();
         activityServices.close();
-        return number; // Example value
+        return number;
     }
 
     private int getTimeSpentMinutes(Context context) {
         activityServices=new ActivityServices(context);
         activityServices.open();
-        int number= activityServices.getTimeSpent();
+        int number=activityServices.getSumOfTimeExercised();
         activityServices.close();
-        return number; // Example value
+        return number;
     }
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
 }

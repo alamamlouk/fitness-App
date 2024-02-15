@@ -5,78 +5,69 @@ public class Activity {
         private long id;
         private String activity_name;
         private int time_to_finish;
-        private String state;
         private int progress;
-        private int number_of_exercise;
         private String path_photo;
+        private int time_exercised;
 
-    public Activity(long id, String activity_name, int time_to_finish, String state, int progress, int number_of_exercise, String path_photo) {
-        this.id = id;
-        this.activity_name = activity_name;
-        this.time_to_finish = time_to_finish;
-        this.state = state;
-        this.progress = progress;
-        this.number_of_exercise = number_of_exercise;
-        this.path_photo = path_photo;
-    }
+        public Activity(long id,
+                        String activity_name,
+                        int time_to_finish,
+                        int progress,
+                        String path_photo,
+                        int time_exercised) {
+                this.id = id;
+                this.activity_name = activity_name;
+                this.time_to_finish = time_to_finish;
+                this.progress = progress;
+                this.path_photo = path_photo;
+                this.time_exercised = time_exercised;
+        }
 
-    public Activity() {
+        public long getId() {
+                return id;
+        }
 
-    }
+        public void setId(long id) {
+                this.id = id;
+        }
 
-    public long getId() {
-        return id;
-    }
+        public String getActivity_name() {
+                return activity_name;
+        }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+        public void setActivity_name(String activity_name) {
+                this.activity_name = activity_name;
+        }
 
-    public String getActivity_name() {
-        return activity_name;
-    }
+        public int getTime_to_finish() {
+                return time_to_finish;
+        }
 
-    public void setActivity_name(String activity_name) {
-        this.activity_name = activity_name;
-    }
+        public void setTime_to_finish(int time_to_finish) {
+                this.time_to_finish = time_to_finish;
+        }
 
-    public int getTime_to_finish() {
-        return time_to_finish;
-    }
+        public int getProgress() {
+                return progress;
+        }
 
-    public void setTime_to_finish(int time_to_finish) {
-        this.time_to_finish = time_to_finish;
-    }
+        public void setProgress(int progress) {
+                this.progress = progress;
+        }
 
-    public String getState() {
-        return state;
-    }
+        public String getPath_photo() {
+                return path_photo;
+        }
 
-    public void setState(String state) {
-        this.state = state;
-    }
+        public void setPath_photo(String path_photo) {
+                this.path_photo = path_photo;
+        }
 
-    public int getProgress() {
-        return progress;
-    }
+        public int getTime_exercised() {
+                return time_exercised;
+        }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
-
-    public int getNumber_of_exercise() {
-        return number_of_exercise;
-    }
-
-    public void setNumber_of_exercise(int number_of_exercise) {
-        this.number_of_exercise = number_of_exercise;
-    }
-
-    public String getPath_photo() {
-        return path_photo;
-    }
-
-    public void setPath_photo(String path_photo) {
-        this.path_photo = path_photo;
-    }
+        public void setTime_exercised(int time_exercised) {
+                this.time_exercised = time_exercised;
+        }
 }

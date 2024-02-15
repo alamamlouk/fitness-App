@@ -20,23 +20,16 @@
             android:layout_height="70dp"
             android:contentDescription="@string/speed_icon"
             android:src="@drawable/speed" />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20"
-            android:textColor="@color/black"
-            android:textSize="20sp"
             android:id="@+id/SpeedKM"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="KM/H"
-            android:textColor="@color/black"
-            android:layout_marginStart="10dp"
             android:layout_gravity="center"
-            android:textSize="20sp"/>
+            android:layout_marginStart="20dp"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

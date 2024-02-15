@@ -3,18 +3,16 @@ package com.example.fitnessapp.Entity;
 public class ActivityDTO {
     private String activity_name;
     private int time_to_finish;
-    private String state;
     private int progress;
-    private int number_of_exercise;
     private String path_photo;
+    private int time_exercised;
 
-    public ActivityDTO(String activity_name, int time_to_finish, String state, int progress, int number_of_exercise, String path_photo) {
+    public ActivityDTO(String activity_name, int time_to_finish, int progress, String path_photo, int time_exercised) {
         this.activity_name = activity_name;
         this.time_to_finish = time_to_finish;
-        this.state = state;
         this.progress = progress;
-        this.number_of_exercise = number_of_exercise;
         this.path_photo = path_photo;
+        this.time_exercised = time_exercised;
     }
 
     public String getActivity_name() {
@@ -33,14 +31,6 @@ public class ActivityDTO {
         this.time_to_finish = time_to_finish;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public int getProgress() {
         return progress;
     }
@@ -49,19 +39,19 @@ public class ActivityDTO {
         this.progress = progress;
     }
 
-    public int getNumber_of_exercise() {
-        return number_of_exercise;
-    }
-
-    public void setNumber_of_exercise(int number_of_exercise) {
-        this.number_of_exercise = number_of_exercise;
-    }
-
     public String getPath_photo() {
         return path_photo;
     }
 
     public void setPath_photo(String path_photo) {
         this.path_photo = path_photo;
+    }
+
+    public int getTime_exercised() {
+        return time_exercised;
+    }
+
+    public void setTime_exercised(int time_exercised) {
+        this.time_exercised = time_exercised;
     }
 }

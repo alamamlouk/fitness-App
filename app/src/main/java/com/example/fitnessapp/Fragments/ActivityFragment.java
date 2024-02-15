@@ -58,17 +58,17 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
 
         exerciseServices.open();
         relationServices.open();
-//        ActivityDTO activity = new ActivityDTO("arms", 20, "In Progress", 20, 20, "");
+//        ActivityDTO activity = new ActivityDTO("arms", 20, 0, "", 0);
 //        long a1 = activityServices.addActivity(activity);
-//        ActivityDTO activity2 = new ActivityDTO("Legs", 30, "Completed", 100, 5, "");
-//        ActivityDTO activity3 = new ActivityDTO("Shoulder", 40, "In Progress", 90, 5, "");
+//        ActivityDTO activity2 = new ActivityDTO("Legs", 30, 0, "", 0);
+//        ActivityDTO activity3 = new ActivityDTO("Shoulder", 40, 0, "", 0);
 //
 //        long a2 = activityServices.addActivity(activity2);
 //        long a3 = activityServices.addActivity(activity3);
-//        ExerciseDTO exerciseDTO = new ExerciseDTO("lift", 10, false);
-//        ExerciseDTO exerciseDTO1=new ExerciseDTO("Dumbels",15,false);
-//        ExerciseDTO exerciseDTO2=new ExerciseDTO("Squat",15,false);
-//        ExerciseDTO exerciseDTO3=new ExerciseDTO("PushUp-incline",20,false);
+//        ExerciseDTO exerciseDTO = new ExerciseDTO("lift", 10, 1,"Lift up","");
+//        ExerciseDTO exerciseDTO1=new ExerciseDTO("Dumbels",15,1,"15 time lift dumbels ","");
+//        ExerciseDTO exerciseDTO2=new ExerciseDTO("Squat",15,1,"squat up and down","");
+//        ExerciseDTO exerciseDTO3=new ExerciseDTO("PushUp-incline",20,1,"","");
 //        long e1= exerciseServices.addExercise(exerciseDTO);
 //        long e2=exerciseServices.addExercise(exerciseDTO1);
 //        long e3=exerciseServices.addExercise(exerciseDTO2);
@@ -91,7 +91,6 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
-        relationServices.open();
 //        activityServices.open();
 //        activityServices.deleteActivity();
 //        activityServices.close();
@@ -129,5 +128,15 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
         Log.d("The parsed id", "onRecyclerViewItemClicked: "+id);
         intent.putExtra("activityId", id);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        activityList = getActivitiesFromDatabase();
+        adapter = new ActivityAdapter(activityList, getContext());
+        adapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 }

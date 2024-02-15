@@ -4,21 +4,18 @@ public class Exercise {
     private long id;
     private String exercise_name;
     private int time_to_finish;
-    private boolean state;
+    private int reputation;
+
     private String exercise_description;
     private String exercise_path_image;
 
-    public Exercise(long id, String exercise_name, int time_to_finish, boolean state, String exercise_description, String exercise_path_image) {
+    public Exercise(long id, String exercise_name, int time_to_finish, int reputation, String exercise_description, String exercise_path_image) {
         this.id = id;
         this.exercise_name = exercise_name;
         this.time_to_finish = time_to_finish;
-        this.state = state;
+        this.reputation = reputation;
         this.exercise_description = exercise_description;
         this.exercise_path_image = exercise_path_image;
-    }
-
-    public Exercise() {
-
     }
 
     public long getId() {
@@ -45,12 +42,12 @@ public class Exercise {
         this.time_to_finish = time_to_finish;
     }
 
-    public boolean isState() {
-        return state;
+    public int getReputation() {
+        return reputation;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
     }
 
     public String getExercise_description() {

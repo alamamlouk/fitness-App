@@ -49,9 +49,9 @@ public class HomeFragment extends Fragment {
         finishedWorkout=view.findViewById(R.id.finishedWorkOutHome);
         inProgressWorkout=view.findViewById(R.id.inProgressHome);
         timeSpent=view.findViewById(R.id.TimeSpentHome);
-        finishedWorkout.setText(String.valueOf(activityServices.getNumberOfActivityFinished()));
-        inProgressWorkout.setText(String.valueOf(activityServices.getNumberOfExercisesInProgress()));
-        timeSpent.setText(String.valueOf(activityServices.getTimeSpent()));
+        finishedWorkout.setText(String.valueOf(activityServices.getCompletedActivitiesCount()));
+        inProgressWorkout.setText(String.valueOf(activityServices.getActivitiesWithTimeExercisedGreaterThanZeroCount()));
+        timeSpent.setText(String.valueOf(activityServices.getSumOfTimeExercised()));
         activityServices.close();
         return view;
     }
