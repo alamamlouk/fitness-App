@@ -1,7 +1,10 @@
 package com.example.fitnessapp.Adapaters;
 
 import android.annotation.SuppressLint;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.example.fitnessapp.Entity.Exercise;
 import com.example.fitnessapp.R;
 import com.example.fitnessapp.Services.ActivityServices;
 import com.example.fitnessapp.Services.RelationServices;
+import com.example.fitnessapp.Stats;
 
 import java.util.List;
 
@@ -69,6 +73,14 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
                 public void onClick(View view) {
                     relationServices.updateExerciseProgress(activityId, exercise.getId(), 1);
                     activityServices.updateTimeExercised(activityId,exercise.getTime_to_finish());
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    ComponentName componentName = new ComponentName(context, Stats.class);
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+                    Intent intent = new Intent(context, Stats.class);
+                    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+                    context.sendBroadcast(intent);
+
                     holder.checkBox.setClickable(false);
                 }
             });

@@ -1,8 +1,10 @@
 package com.example.fitnessapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
@@ -21,9 +23,14 @@ public class Stats extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.finishedWorkOutCountTextView, String.valueOf(finishedWorkOutCount));
             remoteViews.setTextViewText(R.id.inProgressCountTextView, String.valueOf(inProgressCount));
             remoteViews.setTextViewText(R.id.timeSpentMinutesTextView, String.valueOf(timeSpentMinutes));
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            remoteViews.setOnClickPendingIntent(R.id.mainActivity, pendingIntent);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
         }
     }
+
 
     private int getFinishedWorkOutCount(Context context) {
         activityServices=new ActivityServices(context);

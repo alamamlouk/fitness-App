@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 //        activityServices.deleteActivity();
 //        exerciseServices.deleteExercises();
 //        userServices.deleteUser();
-//        relationServices.deleteRelation();
+//       relationServices.deleteRelation();
 //          loadTable.loadUser();
 //        loadTable.loadTheRest();
 

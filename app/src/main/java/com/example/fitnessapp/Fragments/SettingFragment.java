@@ -22,6 +22,8 @@ import com.example.fitnessapp.Services.UserServices;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+
 
 public class SettingFragment extends Fragment {
 
@@ -90,7 +92,9 @@ public class SettingFragment extends Fragment {
             editTextUserName.setText(user.getUserName());
             editHeight.setText(String.valueOf(user.getUserHeight()));
             editWeight.setText(String.valueOf(user.getUserWeight()));
-            bmi.setText("BMI: "+String.valueOf(user.getUserBMI()));
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            String  formattedBMI=decimalFormat.format(user.getUserBMI()) ;
+            bmi.setText("BMI: "+formattedBMI);
         }
         userService.close();
     }
