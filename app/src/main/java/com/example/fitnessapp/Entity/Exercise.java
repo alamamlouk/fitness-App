@@ -5,7 +5,6 @@ public class Exercise {
     private String exercise_name;
     private int time_to_finish;
     private int reputation;
-
     private String exercise_description;
     private String exercise_path_image;
 

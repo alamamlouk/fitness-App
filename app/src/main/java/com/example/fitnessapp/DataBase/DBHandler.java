@@ -16,15 +16,25 @@ import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_REPUT
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_TIME_TO_FINISH;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_RELATION_ID;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_BMI;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_HEIGHT;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_ID;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_NAME;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_WEIGHT;
 import static com.example.fitnessapp.DataBase.static_field.DB_NAME;
 import static com.example.fitnessapp.DataBase.static_field.DB_VERSION;
 import static com.example.fitnessapp.DataBase.static_field.EXERCISE_TABLE_NAME;
 import static com.example.fitnessapp.DataBase.static_field.TABLE_ACTIVITY_EXERCISE_RELATION;
 import static com.example.fitnessapp.DataBase.static_field.TABLE_ACTIVITY_NAME;
+import static com.example.fitnessapp.DataBase.static_field.TABLE_USER_NAME;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.fitnessapp.Services.ActivityServices;
+import com.example.fitnessapp.Services.ExerciseServices;
+import com.example.fitnessapp.Services.RelationServices;
 
 public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
@@ -33,6 +43,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String userQuery = "CREATE TABLE " +
+                TABLE_USER_NAME + " (" +
+                COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_USER_NAME + " TEXT, " +
+                COLUMN_USER_WEIGHT + " REAL, " +
+                COLUMN_USER_HEIGHT + " REAL, " +
+                COLUMN_USER_BMI + " REAL);";
         String activityQuery = " CREATE TABLE " + TABLE_ACTIVITY_NAME + " ( " +
                 COLUMN_ACTIVITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ACTIVITY_NAME + " TEXT ," +
@@ -55,6 +72,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT + " INTEGER ," +
                         "FOREIGN KEY(" + COLUMN_ACTIVITY_ID_FK + ") REFERENCES " + TABLE_ACTIVITY_NAME + "(" + COLUMN_ACTIVITY_ID + "), " +
                         "FOREIGN KEY(" + COLUMN_EXERCISE_ID_FK + ") REFERENCES " + EXERCISE_TABLE_NAME + "(" + COLUMN_EXERCISE_ID + "));";
+        db.execSQL(userQuery);
         db.execSQL(activityQuery);
         db.execSQL(exerciseQuery);
         db.execSQL(relationQuery);

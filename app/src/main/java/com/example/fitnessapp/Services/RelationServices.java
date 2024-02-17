@@ -43,6 +43,11 @@ public class RelationServices {
     public void close() {
         dbHandler.close();
     }
+    public void deleteRelation() {
+        open();
+        database.delete(TABLE_ACTIVITY_EXERCISE_RELATION, null, null);
+        close();
+    }
 
     public void addRelation(long activity_id, long exercise_id) {
         ContentValues values = new ContentValues();
@@ -132,7 +137,7 @@ public class RelationServices {
                 null
         );
 
-        int exerciseProgress = -1; // Default value if no progress is found
+        int exerciseProgress = -1;
 
         if (cursor != null && cursor.moveToFirst()) {
             exerciseProgress = cursor.getInt(cursor.getColumnIndex(COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT));
@@ -141,11 +146,9 @@ public class RelationServices {
         return exerciseProgress;
     }
     public int getNumberOfExercisesForActivity(long activityId) {
-
         String[] columns = {COLUMN_EXERCISE_ID_FK};
         String selection = COLUMN_ACTIVITY_ID_FK + " = ?";
         String[] selectionArgs = {String.valueOf(activityId)};
-
         Cursor cursor = database.query(
                 TABLE_ACTIVITY_EXERCISE_RELATION,
                 columns,
@@ -188,8 +191,7 @@ public class RelationServices {
 
         String[] columns = {COLUMN_EXERCISE_ID_FK};
         String selection = COLUMN_ACTIVITY_ID_FK + " = ? AND " + COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT + " = ?";
-        String[] selectionArgs = {String.valueOf(activityId), "0"}; // "0" represents not finished
-
+        String[] selectionArgs = {String.valueOf(activityId), "0"};
         Cursor cursor = database.query(
                 TABLE_ACTIVITY_EXERCISE_RELATION,
                 columns,
@@ -205,12 +207,9 @@ public class RelationServices {
         if (cursor != null) {
             cursor.close();
         }
-
-
         return allExercisesFinished;
     }
 
-    // Update activity progress
     private void updateActivityProgress(long activityId, int newProgress) {
 
         ContentValues values = new ContentValues();

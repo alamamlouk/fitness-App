@@ -2,6 +2,7 @@ package com.example.fitnessapp.Adapaters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,8 @@ import com.example.fitnessapp.Services.RelationServices;
 import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder> {
-    private List<Activity> activities;
-    private Context context;
+    private final List<Activity> activities;
+    private final Context context;
 
     private OnRecyclerViewItemClickListener listener;
     private final RelationServices relationServices;
@@ -48,7 +49,18 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
         relationServices.open();
         Activity activity = activities.get(position);
         holder.textViewName.setText(activity.getActivity_name());
-        holder.textViewTime.setText(String.valueOf(activity.getTime_to_finish()));
+        holder.textViewTime.setText(String.valueOf(activity.getTime_to_finish())+" Minutes");
+        String image=activity.getPath_photo();
+        int resourceId=holder.itemView.getContext().getResources().getIdentifier(
+                image,"drawable",holder.itemView.getContext().getPackageName()
+        );
+        if (resourceId == 0) {
+            resourceId = holder.itemView.getContext().getResources().getIdentifier(
+                    "arm_day", "drawable", holder.itemView.getContext().getPackageName());
+        }
+        Drawable drawable = holder.itemView.getContext().getResources().getDrawable(resourceId);
+        holder.ImageViewOfActivity.setImageDrawable(drawable);
+
         String NBExercises = String.valueOf(relationServices.getNumberOfExercisesForActivity(activity.getId()));
         String completedEx = String.valueOf(relationServices.getNumberOfFinishedExercises(activity.getId()));
 
@@ -57,7 +69,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
 
         int progressPercentage = (numberOfCompletedExercises * 100) / numberOfExercises;
 
-        holder.textViewNumberOfExercises.setText(NBExercises);
+        holder.textViewNumberOfExercises.setText(NBExercises +" Exercises");
         holder.textViewNumberOfExercisesCompleted.setText(completedEx + "/" + NBExercises);
 
         holder.ProgressBarActivity.setProgress(progressPercentage);
@@ -69,6 +81,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
                 }
             }
         });
+        relationServices.close();
 
     }
 
@@ -79,7 +92,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
 
 
 
-    public class ActivityViewHolder extends RecyclerView.ViewHolder {
+    public static class ActivityViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName;
         TextView textViewTime;
         TextView textViewNumberOfExercises;

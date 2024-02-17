@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,10 +38,11 @@ public class WorkOutAdapter extends RecyclerView.Adapter<WorkOutAdapter.WorkOutV
     public void onBindViewHolder(@NonNull WorkOutAdapter.WorkOutViewHolder holder, int position) {
         WorkOut workOut=workOuts.get(position);
         holder.workoutImage.setImageResource(workOut.getWorkoutImg());
-        holder.workOutTime.setText(String.valueOf(workOut.getWorkOutTime()));
-        holder.numberOfExercises.setText(String.valueOf(workOut.getNumberOfExercises()));
+        holder.workOutTime.setText(String.valueOf(workOut.getWorkOutTime())+" Minuit");
+        holder.numberOfExercises.setText(String.valueOf(workOut.getNumberOfExercises())+" Exercises");
         holder.workOutName.setText(workOut.getWorkoutTile());
-        holder.itemView.setBackgroundColor(getBackgroundColor(position));
+        holder.cardView.setCardBackgroundColor(getBackgroundColor(position));
+
 
     }
     private int getBackgroundColor(int position) {
@@ -58,6 +60,7 @@ public class WorkOutAdapter extends RecyclerView.Adapter<WorkOutAdapter.WorkOutV
     public class WorkOutViewHolder extends RecyclerView.ViewHolder{
         public ImageView workoutImage;
         public TextView workOutName,numberOfExercises,workOutTime;
+        public CardView cardView;
 
         public WorkOutViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +68,7 @@ public class WorkOutAdapter extends RecyclerView.Adapter<WorkOutAdapter.WorkOutV
             this.workOutName=itemView.findViewById(R.id.workOutName);
             this.numberOfExercises=itemView.findViewById(R.id.nbExercises);
             this.workOutTime=itemView.findViewById(R.id.timeToFinish);
+            this.cardView=itemView.findViewById(R.id.MNCardView);
         }
     }
 }

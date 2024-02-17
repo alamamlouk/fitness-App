@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.fitnessapp.DataBase.DBHandler;
 import com.example.fitnessapp.Entity.Activity;
+import com.example.fitnessapp.Entity.ActivityAndTimeExercised;
 import com.example.fitnessapp.Entity.ActivityDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,9 @@ public class ActivityServices {
 
     //Delete all activity
     public void deleteActivity() {
+        open();
         database.delete(TABLE_ACTIVITY_NAME, null, null);
+        close();
     }
     public int getCompletedActivitiesCount() {
         String[] columns = {COLUMN_ACTIVITY_ID};
@@ -109,8 +112,8 @@ public class ActivityServices {
     }
     public int getActivitiesWithTimeExercisedGreaterThanZeroCount() {
         String[] columns = {COLUMN_ACTIVITY_ID};
-        String selection = COLUMN_ACTIVITY_TIME_EXERCISED + " > ?";
-        String[] selectionArgs = {"0"};
+        String selection = COLUMN_ACTIVITY_TIME_EXERCISED + " > ? AND "+COLUMN_ACTIVITY_PROGRESS+" =? ";
+        String[] selectionArgs = {"0","0"};
 
         @SuppressLint("Recycle") Cursor cursor = database.query(
                 TABLE_ACTIVITY_NAME,
@@ -135,7 +138,6 @@ public class ActivityServices {
         String[] columns = {"SUM(" + COLUMN_ACTIVITY_TIME_EXERCISED + ")"};
         String selection = COLUMN_ACTIVITY_TIME_EXERCISED + " > ?";
         String[] selectionArgs = {"0"};
-
         @SuppressLint("Recycle") Cursor cursor = database.query(
                 TABLE_ACTIVITY_NAME,
                 columns,
@@ -145,9 +147,7 @@ public class ActivityServices {
                 null,
                 null
         );
-
         int sumOfTimeExercised = 0;
-
         if (cursor != null && cursor.moveToFirst()) {
             sumOfTimeExercised = cursor.getInt(0);
             cursor.close();
@@ -156,13 +156,77 @@ public class ActivityServices {
         return sumOfTimeExercised;
     }
 
-    public void updateTimeExercised(long activityId, int newTimeExercised) {
+    public void updateTimeExercised(long activityId, int timeToAdd) {
+
+        int currentExercisedTime = getTimeExercisedForActivity(activityId);
+
+        // Calculate the new time exercised by adding the timeToAdd
+        int newTimeExercised = currentExercisedTime + timeToAdd;
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_ACTIVITY_TIME_EXERCISED, newTimeExercised);
+
         String selection = COLUMN_ACTIVITY_ID + " = ?";
         String[] selectionArgs = {String.valueOf(activityId)};
+
         database.update(TABLE_ACTIVITY_NAME, values, selection, selectionArgs);
+    }
+    @SuppressLint("Range")
+    public int getTimeExercisedForActivity(long activityId) {
+
+        String[] columns = {COLUMN_ACTIVITY_TIME_EXERCISED};
+        String selection = COLUMN_ACTIVITY_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(activityId)};
+
+        Cursor cursor = database.query(
+                TABLE_ACTIVITY_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        int timeExercised = 0;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Retrieve the current value of COLUMN_ACTIVITY_TIME_EXERCISED
+            timeExercised = cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVITY_TIME_EXERCISED));
+            cursor.close();
+        }
+        return timeExercised;
+    }
+
+    public List<ActivityAndTimeExercised> getAllActivitiesWithTimeExercised() {
+        List<ActivityAndTimeExercised> activitiesWithTime = new ArrayList<>();
+
+
+        // Query to retrieve activity details along with time exercised
+        String query = "SELECT " +
+                TABLE_ACTIVITY_NAME + "." + COLUMN_ACTIVITY_NAME + ", " +
+                TABLE_ACTIVITY_NAME + "." + COLUMN_ACTIVITY_TIME_EXERCISED +
+                " FROM " + TABLE_ACTIVITY_NAME;
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String activityName = cursor.getString(cursor.getColumnIndex(COLUMN_ACTIVITY_NAME));
+                @SuppressLint("Range") int timeExercised = cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVITY_TIME_EXERCISED));
+
+                // Create an ActivityWithTimeExercised object
+                ActivityAndTimeExercised activityWithTime = new ActivityAndTimeExercised(activityName, timeExercised);
+
+                // Add the object to the list
+                activitiesWithTime.add(activityWithTime);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+
+        return activitiesWithTime;
     }
 
 }

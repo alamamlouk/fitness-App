@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape>
+            <solid android:color="#2196F3" /> <!-- Blue color when checked -->
+        </shape>
+        <color android:color="#FFFFFF" /> <!-- Text and icon color when checked -->
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#FFFFFF" /> <!-- White color when unchecked -->
+        </shape>
+        <color android:color="#000000" /> <!-- Text and icon color when unchecked -->
+    </item>
+</selector>

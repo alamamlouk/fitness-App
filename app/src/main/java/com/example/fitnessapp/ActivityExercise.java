@@ -20,6 +20,7 @@ import java.util.List;
 
 public class ActivityExercise extends AppCompatActivity {
     private final RelationServices relationServices=new RelationServices(this);
+    private final ActivityServices activityServices=new ActivityServices(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

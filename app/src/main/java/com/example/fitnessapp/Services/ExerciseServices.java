@@ -6,6 +6,7 @@ import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_PATH_
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_REPUTATION;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_TIME_TO_FINISH;
 import static com.example.fitnessapp.DataBase.static_field.EXERCISE_TABLE_NAME;
+import static com.example.fitnessapp.DataBase.static_field.TABLE_ACTIVITY_NAME;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -37,4 +38,9 @@ public class ExerciseServices {
         values.put(COLUMN_EXERCISE_REPUTATION, exerciseDTO.getReputation());
         return database.insert(EXERCISE_TABLE_NAME, null, values);
     }
+    public void deleteExercises() {
+        open();
+        database.delete(EXERCISE_TABLE_NAME, null, null);
+        close();
+        }
 }

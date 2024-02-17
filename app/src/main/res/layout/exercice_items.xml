@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="10dp"
+    android:elevation="20dp"
     android:layout_margin="30dp"
-    android:background="@drawable/activity_item_background">
+    android:background="@drawable/activity_background">
 
 
     <ImageView
-        android:id="@+id/activityImage"
+        android:id="@+id/exerciseImage"
         android:layout_width="170dp"
         android:layout_height="95dp"
         android:contentDescription="activity img"
@@ -26,7 +27,7 @@
         android:orientation="vertical"
         app:layout_constraintRight_toRightOf="parent"
 
-        app:layout_constraintStart_toEndOf="@+id/activityImage"
+        app:layout_constraintStart_toEndOf="@+id/exerciseImage"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -55,11 +56,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/activityImage"
+        android:layout_below="@+id/exerciseImage"
         android:orientation="vertical"
         android:layout_margin="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activityImage">
+        app:layout_constraintTop_toBottomOf="@id/exerciseImage">
 
         <TextView
             android:layout_width="wrap_content"

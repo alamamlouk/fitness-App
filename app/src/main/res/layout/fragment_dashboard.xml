@@ -12,6 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/rounded_corners"
         android:padding="10dp"
+        android:elevation="10dp"
         android:layout_margin="10dp"
         android:orientation="horizontal"
         android:id="@+id/SpeedLayout">
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
-            android:text="0"
+            android:text="0 KM/H"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
@@ -39,6 +40,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/rounded_corners"
         android:padding="10dp"
+        android:elevation="10dp"
         android:layout_margin="10dp"
         android:orientation="horizontal"
         android:id="@+id/stepsLayout">

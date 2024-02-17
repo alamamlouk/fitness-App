@@ -54,32 +54,6 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
         activityServices = new ActivityServices(getContext());
         exerciseServices = new ExerciseServices(getContext());
         relationServices = new RelationServices(getContext());
-        activityServices.open();
-
-        exerciseServices.open();
-        relationServices.open();
-//        ActivityDTO activity = new ActivityDTO("arms", 20, 0, "", 0);
-//        long a1 = activityServices.addActivity(activity);
-//        ActivityDTO activity2 = new ActivityDTO("Legs", 30, 0, "", 0);
-//        ActivityDTO activity3 = new ActivityDTO("Shoulder", 40, 0, "", 0);
-//
-//        long a2 = activityServices.addActivity(activity2);
-//        long a3 = activityServices.addActivity(activity3);
-//        ExerciseDTO exerciseDTO = new ExerciseDTO("lift", 10, 1,"Lift up","");
-//        ExerciseDTO exerciseDTO1=new ExerciseDTO("Dumbels",15,1,"15 time lift dumbels ","");
-//        ExerciseDTO exerciseDTO2=new ExerciseDTO("Squat",15,1,"squat up and down","");
-//        ExerciseDTO exerciseDTO3=new ExerciseDTO("PushUp-incline",20,1,"","");
-//        long e1= exerciseServices.addExercise(exerciseDTO);
-//        long e2=exerciseServices.addExercise(exerciseDTO1);
-//        long e3=exerciseServices.addExercise(exerciseDTO2);
-//        long e4=exerciseServices.addExercise(exerciseDTO3);
-//        relationServices.addRelation(a1,e1);
-//        relationServices.addRelation(a1,e2);
-//        relationServices.addRelation(a2,e3);
-//        relationServices.addRelation(a3,e4);
-        exerciseServices.close();
-        relationServices.close();
-        activityServices.close();
     }
 
     @Override
@@ -91,9 +65,7 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
-//        activityServices.open();
-//        activityServices.deleteActivity();
-//        activityServices.close();
+
         return view;
     }
 
@@ -125,7 +97,6 @@ public class ActivityFragment extends Fragment implements OnRecyclerViewItemClic
     @Override
     public void onRecyclerViewItemClicked(long id) {
         Intent intent = new Intent(getContext(), ActivityExercise.class);
-        Log.d("The parsed id", "onRecyclerViewItemClicked: "+id);
         intent.putExtra("activityId", id);
         startActivity(intent);
     }

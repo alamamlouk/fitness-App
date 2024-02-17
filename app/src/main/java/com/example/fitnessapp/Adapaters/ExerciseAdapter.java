@@ -1,10 +1,13 @@
 package com.example.fitnessapp.Adapaters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,22 +44,31 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         return new ExerciseViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ExerciseAdapter.ExerciseViewHolder holder, int position) {
         Exercise exercise = exerciseList.get(position);
         relationServices.open();
         activityServices.open();
         holder.ExerciseName.setText(exercise.getExercise_name());
-        holder.timeToFinishTheExercise.setText(String.valueOf(exercise.getTime_to_finish()));
+        holder.timeToFinishTheExercise.setText(String.valueOf(exercise.getTime_to_finish())+" Minutes ");
         holder.exerciseDescription.setText(exercise.getExercise_description());
+        String imageName=exercise.getExercise_path_image();
+        int resourceId = holder.itemView.getContext().getResources().getIdentifier(
+                imageName, "drawable", holder.itemView.getContext().getPackageName());
+        if (resourceId == 0) {
+            resourceId = holder.itemView.getContext().getResources().getIdentifier(
+                    "arm_day", "drawable", holder.itemView.getContext().getPackageName());
+        }
+
+        Drawable drawable = holder.itemView.getContext().getResources().getDrawable(resourceId);
+        holder.imageView.setImageDrawable(drawable);
         if(relationServices.getExerciseProgress(activityId,exercise.getId())==0){
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     relationServices.updateExerciseProgress(activityId, exercise.getId(), 1);
                     activityServices.updateTimeExercised(activityId,exercise.getTime_to_finish());
-                    relationServices.close();
-                    activityServices.close();
                     holder.checkBox.setClickable(false);
                 }
             });
@@ -66,6 +78,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
             holder.checkBox.setClickable(false);
 
         }
+
     }
 
     @Override
@@ -76,6 +89,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
         TextView ExerciseName, timeToFinishTheExercise, exerciseDescription;
         CheckBox checkBox;
+        ImageView imageView;
 
         public ExerciseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +97,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
             timeToFinishTheExercise = itemView.findViewById(R.id.textViewExerciseTime);
             checkBox = itemView.findViewById(R.id.checkboxStatus);
             exerciseDescription = itemView.findViewById(R.id.exerciseDescription);
+            imageView=itemView.findViewById(R.id.exerciseImage);
 
         }
     }
