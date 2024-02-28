@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -43,7 +44,12 @@ public class SettingFragment extends Fragment implements AdapterView.OnItemSelec
     private Button buttonUpdate;
     private boolean isEditing = false;
     private ImageView imageView;
+    private boolean userSelected = false;
+    private static final String PREFS_NAME = "LanguageFile";
+    private static final String SELECTED_LANGUAGE_POSITION = "SelectedLanguagePosition";
 
+    private int selectedLanguagePosition = 0;
+    Spinner spinner;
     private TextView bmi;
     private UserServices userService;
     private final String[] countryName = {"French","Spanish","English","Italian"};
@@ -69,7 +75,7 @@ public class SettingFragment extends Fragment implements AdapterView.OnItemSelec
         buttonUpdate = view.findViewById(R.id.buttonCalculateBMI);
         imageView = view.findViewById(R.id.editIcon);
         bmi = view.findViewById(R.id.BMI);
-        Spinner spinner = view.findViewById(R.id.languageSpinner);
+        spinner = view.findViewById(R.id.languageSpinner);
         SelectLanguageAdapter selectLanguageAdapter = new SelectLanguageAdapter(getContext(), flags, countryName);
         spinner.setAdapter(selectLanguageAdapter);
         spinner.setOnItemSelectedListener(this);
@@ -145,21 +151,33 @@ public class SettingFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        selectedLanguagePosition = prefs.getInt(SELECTED_LANGUAGE_POSITION, 0);
+        spinner.setSelection(selectedLanguagePosition);
+
         displayUserDetails();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        changeLanguage();
-        Toast.makeText(view.getContext(), countryName[position], Toast.LENGTH_LONG).show();
+        if(userSelected){
+            changeLanguage(getLanguageCode(position));
+            SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(SELECTED_LANGUAGE_POSITION, position);
+            editor.putString("SelectedLanguage", getLanguageCode(position));
+            editor.apply();
+        }
+        else{
+            userSelected=true;
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-    public void changeLanguage() {
+    public void changeLanguage(String language) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_language_change, null);
         ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
@@ -183,7 +201,7 @@ public class SettingFragment extends Fragment implements AdapterView.OnItemSelec
                     progress++;
                     handler.postDelayed(this, interval);
                 } else {
-                    Locale locale = new Locale("fr");
+                    Locale locale = new Locale(language);
                     Resources res = getResources();
                     Configuration conf = res.getConfiguration();
                     conf.setLocale(locale);
@@ -196,5 +214,19 @@ public class SettingFragment extends Fragment implements AdapterView.OnItemSelec
                 }
             }
         });
+    }
+    private String getLanguageCode(int position) {
+        switch (position) {
+            case 0:
+                return "fr";
+            case 1:
+                return "es";
+            case 2:
+                return "en";
+            case 3:
+                return "it";
+            default:
+                return "";
+        }
     }
 }

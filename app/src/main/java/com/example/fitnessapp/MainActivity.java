@@ -1,5 +1,8 @@
 package com.example.fitnessapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -23,6 +26,8 @@ import com.example.fitnessapp.Services.RelationServices;
 import com.example.fitnessapp.Services.UserServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
     ActivityServices activityServices;
     ExerciseServices exerciseServices;
@@ -44,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 //       relationServices.deleteRelation();
 //          loadTable.loadUser();
 //        loadTable.loadTheRest();
+        SharedPreferences prefs = getSharedPreferences("LanguageFile", Context.MODE_PRIVATE);
+        String selectedLanguage = prefs.getString("SelectedLanguage", "en"); // Default to English
+        setLocale(selectedLanguage);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationBar);
         FrameLayout frameLayout = findViewById(R.id.frameLayout);
@@ -81,5 +89,15 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
 
+    }
+
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }
