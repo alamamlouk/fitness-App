@@ -21,7 +21,7 @@
             android:id="@+id/UserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello,Ala"
+            android:text="@string/hello_ala"
             android:textColor="@color/black"
             android:textSize="30sp" />
 
@@ -30,11 +30,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/UserName"
-            android:text="Let's check your activity"
+            android:text="@string/let_s_check_your_activity"
             android:textColor="#972E2B2B"
             android:textSize="15sp" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -85,8 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="17dp"
                 android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:text="Finished"
+                android:paddingStart="10dp"
+                android:text="@string/finished"
 
 
                 android:textColor="@color/black"
@@ -102,7 +103,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:id="@+id/finishedWorkOutHome"
-            android:text="12"
+            android:text="0"
             android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -112,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Completed Workout"
+            android:text="@string/completed_workout"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -147,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="In Progress"
+                android:text="@string/in_progress"
                 android:textColor="@color/black"
                 android:layout_gravity="center"/>
         </LinearLayout>
@@ -162,7 +163,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2 "
                 android:id="@+id/inProgressHome"
                 android:textSize="20sp"
                 android:textColor="@color/black" />
@@ -170,7 +170,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Workout"
+                android:text="@string/workout"
                 android:textColor="#977A7676"
                 />
         </LinearLayout>
@@ -206,7 +206,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time Spent"
+                android:text="@string/time_spent"
                 android:textColor="@color/black"
                 android:layout_gravity="center"/>
         </LinearLayout>
@@ -228,7 +228,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Minuites"
+                android:text="@string/minutes"
                 android:textColor="#977A7676" />
         </LinearLayout>
 
@@ -239,8 +239,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Discover New Workouts"
-        android:textSize="20dp"
+        android:text="@string/discover_new_workouts"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/finishedWorkOut" />
@@ -289,14 +289,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:text="Keep the progress !"
-                android:textSize="20dp"
+                android:text="@string/keep_the_progress"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="your are more ssuccessful then 88% \nof the users" />
+                android:text="@string/your_are_more_ssuccessful_then_88_nof_the_users" />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FitnessApp</string>
+    <string name="steps">Passi</string>
+    <string name="hello_ala">Ciao,Ala</string>
+    <string name="let_s_check_your_activity">Controlliamo la tua attività</string>
+    <string name="finished">Finita</string>
+    <string name="completed_workout">Allenamento completato</string>
+    <string name="in_progress">In corso</string>
+    <string name="workout">Allenamento</string>
+    <string name="time_spent">Tempo impiegato</string>
+    <string name="minutes">Minuti</string>
+    <string name="discover_new_workouts">Scopri nuovi allenamenti</string>
+    <string name="keep_the_progress">Mantieni il progresso!</string>
+    <string name="your_are_more_ssuccessful_then_88_nof_the_users">hai più successo dell\'88% degli utenti</string>
+    <string name="user_name">Nome utente</string>
+    <string name="enter_height_in_meters">Inserisci l\'altezza (in metri)</string>
+    <string name="enter_weight_in_kg">Inserisci il peso (in kg)</string>
+    <string name="update">Aggiornamento</string>
+    <string name="description">Descrizione</string>
+</resources>

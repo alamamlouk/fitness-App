@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:hint="User Name"
+            android:hint="@string/user_name"
             android:inputType="none"
             android:enabled="false"/>
     </LinearLayout>
@@ -51,7 +51,7 @@
         android:id="@+id/editTextHeight"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Enter Height (in meters)"
+        android:hint="@string/enter_height_in_meters"
         android:inputType="numberDecimal"
         android:enabled="false"/>
 
@@ -59,21 +59,25 @@
         android:id="@+id/editTextWeight"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Enter Weight (in kg)"
+        android:hint="@string/enter_weight_in_kg"
         android:inputType="numberDecimal"
         android:enabled="false"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/BMI"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginVertical="10dp"
-        android:text="BMI"/>
+        android:text="@string/bmi"/>
     <Button
         android:id="@+id/buttonCalculateBMI"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update"
+        android:text="@string/update"
         android:visibility="invisible"
         android:enabled="true"/>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/languageSpinner"/>
 </LinearLayout>
