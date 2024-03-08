@@ -14,6 +14,7 @@ import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_NAME;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_PATH_IMG;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_REPUTATION;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_TIME_TO_FINISH;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_FINISHED_TIME;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_RELATION_ID;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_USER_BMI;
@@ -31,10 +32,6 @@ import static com.example.fitnessapp.DataBase.static_field.TABLE_USER_NAME;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.fitnessapp.Services.ActivityServices;
-import com.example.fitnessapp.Services.ExerciseServices;
-import com.example.fitnessapp.Services.RelationServices;
 
 public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
@@ -69,6 +66,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         COLUMN_RELATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_ACTIVITY_ID_FK + " INTEGER, " +
                         COLUMN_EXERCISE_ID_FK + " INTEGER, " +
+                        COLUMN_FINISHED_TIME + " INTEGER ," +
                         COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT + " INTEGER ," +
                         "FOREIGN KEY(" + COLUMN_ACTIVITY_ID_FK + ") REFERENCES " + TABLE_ACTIVITY_NAME + "(" + COLUMN_ACTIVITY_ID + "), " +
                         "FOREIGN KEY(" + COLUMN_EXERCISE_ID_FK + ") REFERENCES " + EXERCISE_TABLE_NAME + "(" + COLUMN_EXERCISE_ID + "));";

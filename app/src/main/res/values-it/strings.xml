@@ -18,4 +18,6 @@
     <string name="enter_weight_in_kg">Inserisci il peso (in kg)</string>
     <string name="update">Aggiornamento</string>
     <string name="description">Descrizione</string>
+    <string name="workouts">Allenamenti</string>
+    <string name="language">Language</string>
 </resources>

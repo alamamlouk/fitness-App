@@ -1,6 +1,9 @@
 package com.example.fitnessapp.Fragments;
 
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,31 +19,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.fitnessapp.Entity.ActivityAndTimeExercised;
 import com.example.fitnessapp.R;
 import com.example.fitnessapp.Services.ActivityServices;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment implements LocationListener, SensorEventListener {
+public class DashboardFragment extends Fragment implements LocationListener, SensorEventListener, OnMapReadyCallback {
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
@@ -50,40 +60,37 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
     private Sensor accelerometerSensor;
     private TextView stepCountTextView;
     private int stepCount = 0;
+    private static final int DEFAULT_ZOOM = 15;
+    private ImageButton setMyLocation;
 
     private static final float STEP_THRESHOLD = 12.0f;
-
+    private GoogleMap googleMap;
+    private final int FINE_PERMISSION_CODE = 1;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private Marker myMarker;
+    private List<Marker> markerList=new ArrayList<>();
+    private List<Polyline>polylineList=new ArrayList<>();
+    private TextView distance;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        int completedExercises = 25;
-        int totalExercises = 50;
-        float percentage = (completedExercises * 100f) / totalExercises;
         speedTextView = view.findViewById(R.id.SpeedKM);
         stepCountTextView=view.findViewById(R.id.steps);
-        BarChart barChart  = view.findViewById(R.id.chart);
+        setMyLocation=view.findViewById(R.id.currentLoc);
+        distance=view.findViewById(R.id.distance);
         ActivityServices activityServices=new ActivityServices(getContext());
         activityServices.open();
-        List<ActivityAndTimeExercised> activitiesWithTime = activityServices.getAllActivitiesWithTimeExercised();
-        List<BarEntry> entries = new ArrayList<>();
-        int[] colors = new int[]{Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW, Color.MAGENTA, Color.CYAN};
-        for (int i = 0; i < activitiesWithTime.size(); i++) {
-            ActivityAndTimeExercised activityWithTime = activitiesWithTime.get(i);
-            entries.add(new BarEntry(i + 1, activityWithTime.getTime_exercised()));
-        }
-        BarDataSet dataSet = new BarDataSet(entries, "Time Exercised");
-        dataSet.setColors(colors);
-        BarData barData = new BarData(dataSet);
-        barChart.setData(barData);
-        barChart.getDescription().setEnabled(false);
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(getActivityNames(activitiesWithTime)));
-        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        barChart.getXAxis().setGranularity(1f);
-        barChart.setDrawGridBackground(false);
-        barChart.setDrawBorders(true);
-        barChart.animateY(1000);
-        barChart.invalidate();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+
+
+
+        getLastLocation();
+
+
+
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -103,9 +110,52 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
             Log.e("SensorManager", "SensorManager not available");
         }
 
+        setMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setToMyLocation();
+            }
+        });
+
+
         return view;
     }
 
+    private void setToMyLocation() {
+
+        for (Marker marker:markerList){
+            if (!marker.equals(myMarker)){
+                marker.remove();
+            }
+        }
+        for (Polyline polyline:polylineList){
+            polyline.remove();
+        }
+        LatLng place = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place,16F));
+    }
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                    if (supportMapFragment == null) {
+                        supportMapFragment = SupportMapFragment.newInstance();
+                        getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commit();
+                    }
+                    supportMapFragment.getMapAsync(DashboardFragment.this);
+                }
+            }
+        });
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -122,6 +172,14 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
                 Log.e("GPS", "Location permission denied");
             }
         }
+        if (requestCode == FINE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Log.e("MAp", "Location permission denied");
+
+            }
+        }
     }
     @Override
     public void onResume() {
@@ -134,14 +192,12 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
     public void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
-
         locationManager.removeUpdates(this);
     }
     @Override
     public void onLocationChanged(Location location) {
 
         float speed = location.getSpeed();
-
         float speedKmH = (speed * 3600) / 1000;
 
         updateSpeedUI(speedKmH);
@@ -159,9 +215,10 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
     public void onProviderDisabled(String provider) {
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateSpeedUI(float speed) {
         if (speedTextView != null) {
-            speedTextView.setText("Speed: " +(int)speed + " km/h");
+            speedTextView.setText((int) speed + " km/h");
         }
     }
 
@@ -176,28 +233,70 @@ public class DashboardFragment extends Fragment implements LocationListener, Sen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+    @SuppressLint("SetTextI18n")
     private void updateStepCountUI() {
         if (stepCountTextView != null) {
-            stepCountTextView.setText("Step Count: " + stepCount);
+            stepCountTextView.setText(String.valueOf(stepCount));
         }
     }
     private void detectSteps(float x, float y, float z) {
-        // Calculate the magnitude of acceleration
         float magnitude = (float) Math.sqrt(x * x + y * y + z * z);
-        Log.d("magnitude", "detectSteps: "+magnitude);
         if (magnitude > STEP_THRESHOLD) {
             stepCount++;
             updateStepCountUI();
         }
     }
-    private String[] getActivityNames(List<ActivityAndTimeExercised> activitiesWithTime) {
-        String[] activityNames = new String[activitiesWithTime.size() + 1];
-        activityNames[0] = "";
 
-        for (int i = 0; i < activitiesWithTime.size(); i++) {
-            activityNames[i + 1] = activitiesWithTime.get(i).getActivity_name();
-        }
 
-        return activityNames;
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        LatLng place = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        this.myMarker=this.googleMap.addMarker(new MarkerOptions().position(place).title("me").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place,DEFAULT_ZOOM));
+        markerList.add(this.myMarker);
+
+        this.googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+
+                for (Marker marker:markerList){
+                    if (!marker.equals(myMarker)){
+                        marker.remove();
+                    }
+                }
+                for (Polyline polyline:polylineList){
+                    polyline.remove();
+                }
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("New Marker");
+                Marker newMarker=googleMap.addMarker(markerOptions);
+                markerList.add(newMarker);
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .add(new LatLng(myMarker.getPosition().latitude, myMarker.getPosition().longitude))
+                        .add(new LatLng(newMarker.getPosition().latitude, newMarker.getPosition().longitude))
+                        .color(Color.BLUE)
+                        .width(10);
+                Polyline myPolyline;
+                myPolyline=googleMap.addPolyline(polylineOptions);
+                polylineList.add(myPolyline);
+                distance.setText("Distance ≃ "+calculateDistance(myMarker,newMarker));
+            }
+        });
     }
+    private String calculateDistance(Marker marker1, Marker marker2) {
+        Location location1 = new Location("marker1");
+        location1.setLatitude(marker1.getPosition().latitude);
+        location1.setLongitude(marker1.getPosition().longitude);
+
+        Location location2 = new Location("marker2");
+        location2.setLatitude(marker2.getPosition().latitude);
+        location2.setLongitude(marker2.getPosition().longitude);
+
+        float distance = location1.distanceTo(location2);
+        return String.format("%.2f meters", distance);
+    }
+
 }
+

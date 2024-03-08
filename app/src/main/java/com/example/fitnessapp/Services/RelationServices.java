@@ -10,6 +10,7 @@ import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_NAME;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_PATH_IMG;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_REPUTATION;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_EXERCISE_TIME_TO_FINISH;
+import static com.example.fitnessapp.DataBase.static_field.COLUMN_FINISHED_TIME;
 import static com.example.fitnessapp.DataBase.static_field.COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT;
 import static com.example.fitnessapp.DataBase.static_field.EXERCISE_TABLE_NAME;
 import static com.example.fitnessapp.DataBase.static_field.TABLE_ACTIVITY_EXERCISE_RELATION;
@@ -20,11 +21,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.fitnessapp.DataBase.DBHandler;
 import com.example.fitnessapp.Entity.Exercise;
+import com.example.fitnessapp.Entity.ExerciseByDay;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RelationServices {
@@ -220,8 +224,46 @@ public class RelationServices {
 
         database.update(TABLE_ACTIVITY_NAME, values, selection, selectionArgs);
 
-        database.close();
+
     }
+
+    public void setTimeFinishedIn(long activityId, long exercise) {
+        ContentValues values = new ContentValues();
+        Date finishedOn = new Date();
+        Log.d("TAG", "setTimeFinishedIn: " + finishedOn.getDay());
+
+        values.put(COLUMN_FINISHED_TIME, finishedOn.getDay());
+        Log.d("testTime", "setTimeFinishedIn: " + new Date().getTime());
+
+        String selection = COLUMN_ACTIVITY_ID_FK + " = ? AND " + COLUMN_EXERCISE_ID_FK + " = ? ";
+        String[] selectionArgs = {String.valueOf(activityId), String.valueOf(exercise)};
+        int update = database.update(TABLE_ACTIVITY_EXERCISE_RELATION, values, selection, selectionArgs);
+        if (update > 0) {
+            Log.d("updated", "setTimeFinishedIn: updated");
+    } else {
+            Log.d("updated", "setTimeFinishedIn: no update");
+        }
+    }
+
+    public List<ExerciseByDay> retrieveEachDaYFinishedExercised() {
+        List<ExerciseByDay>exerciseByDays=new ArrayList<>();
+        String query =
+                " SELECT " + COLUMN_FINISHED_TIME + " AS day_of_week, COUNT(*) AS exercises_finished_count " +
+                        "FROM " + TABLE_ACTIVITY_EXERCISE_RELATION + " " +
+                        "WHERE " + COLUMN_RELATION_EXERCISE_FINISHED_OR_NOT + " = 1 " +  // Assuming 1 indicates finished
+                        "GROUP BY day_of_week";
+
+        Cursor cursor = database.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") int dayOfWeek = cursor.getInt(cursor.getColumnIndex("day_of_week"));
+            @SuppressLint("Range") int exercisesFinishedCount = cursor.getInt(cursor.getColumnIndex("exercises_finished_count"));
+            ExerciseByDay exerciseByDay=new ExerciseByDay(dayOfWeek,exercisesFinishedCount);
+            exerciseByDays.add(exerciseByDay);
+
+        }
+        return exerciseByDays;
+    }
+
 
 
 

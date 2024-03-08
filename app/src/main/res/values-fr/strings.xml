@@ -18,4 +18,6 @@
     <string name="enter_height_in_meters">Entrez la hauteur (en mètres)</string>
     <string name="enter_weight_in_kg">Entrez le poids (en kg)</string>
     <string name="update">Mise à jour</string>
+    <string name="workouts">Entraînements</string>
+    <string name="language">Language</string>
 </resources>

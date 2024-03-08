@@ -168,6 +168,7 @@
                 android:textColor="@color/black" />
 
             <TextView
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/workout"
@@ -226,6 +227,7 @@
                 android:textColor="@color/black" />
 
             <TextView
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/minutes"
@@ -238,7 +240,8 @@
         android:id="@+id/simple"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/discover_new_workouts"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -254,7 +257,7 @@
         app:layout_constraintTop_toBottomOf="@id/simple"
         android:id="@+id/workOuts"
         android:orientation="horizontal"
-
+        android:layout_marginTop="10dp"
         />
 
     <LinearLayout

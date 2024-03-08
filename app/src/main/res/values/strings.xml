@@ -26,4 +26,12 @@
     <string name="update">Update</string>
     <string name="description">Description</string>
     <string name="bmi" translatable="false">BMI</string>
+    <string name="workouts">Workouts</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="_0_km_h" translatable="false">0 KM/H</string>
+    <string name="language">Language</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+       AIzaSyA9CamnVenbDKPKO050TiGh3Q8yt3h1YfQ
+    </string>
+    <string name="gps">gps</string>
 </resources>

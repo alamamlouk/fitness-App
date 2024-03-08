@@ -72,7 +72,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
                 @Override
                 public void onClick(View view) {
                     relationServices.updateExerciseProgress(activityId, exercise.getId(), 1);
+                    relationServices.setTimeFinishedIn(activityId, exercise.getId());
                     activityServices.updateTimeExercised(activityId,exercise.getTime_to_finish());
+
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                     ComponentName componentName = new ComponentName(context, Stats.class);
                     int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);

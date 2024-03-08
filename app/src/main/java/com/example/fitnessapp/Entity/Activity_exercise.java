@@ -1,16 +1,26 @@
 package com.example.fitnessapp.Entity;
 
+import java.util.Date;
+
 public class Activity_exercise {
     private long activity_exercise_relation_id;
     private long activity_id;
     private long exercise_id;
     private int exerciseProgress;
+    private Date finished_on;
 
-    public Activity_exercise(long activity_exercise_relation_id, long activity_id, long exercise_id, int exerciseProgress) {
+    public Activity_exercise(long activity_exercise_relation_id, long activity_id, long exercise_id) {
         this.activity_exercise_relation_id = activity_exercise_relation_id;
         this.activity_id = activity_id;
         this.exercise_id = exercise_id;
-        this.exerciseProgress = exerciseProgress;
+    }
+
+    public Date getFinished_on() {
+        return finished_on;
+    }
+
+    public void setFinished_on(Date finished_on) {
+        this.finished_on = finished_on;
     }
 
     public long getActivity_exercise_relation_id() {
