@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //set Background of the whole app blue
         getWindow().getDecorView().setBackgroundColor(Color.parseColor("#FFE1F5FE"));
+        //Call the services if needed
         activityServices = new ActivityServices(this);
         exerciseServices = new ExerciseServices(this);
         relationServices = new RelationServices(this);
@@ -51,13 +53,15 @@ public class MainActivity extends AppCompatActivity {
 //       relationServices.deleteRelation();
 //          loadTable.loadUser();
 //        loadTable.loadTheRest();
+
+        //Here we will check the language in the shared preference file
         SharedPreferences prefs = getSharedPreferences("LanguageFile", Context.MODE_PRIVATE);
-        String selectedLanguage = prefs.getString("SelectedLanguage", "en"); // Default to English
+        String selectedLanguage = prefs.getString("SelectedLanguage", "en");
+        //this function is set the language of the app
         setLocale(selectedLanguage);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationBar);
         FrameLayout frameLayout = findViewById(R.id.frameLayout);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -80,26 +84,50 @@ public class MainActivity extends AppCompatActivity {
         });
         loadFragment(new HomeFragment(),true);
     }
+    //load the fragment into the frame layout
     private void loadFragment(Fragment fragment, boolean isAppInitialized){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        if (!isAppInitialized) {
+            Fragment currentFragment = fragmentManager.findFragmentById(R.id.frameLayout);
+            if (currentFragment != null) {
+                int currentFragmentIndex = getFragmentIndex(currentFragment);
+                int newFragmentIndex = getFragmentIndex(fragment);
+                if (newFragmentIndex > currentFragmentIndex) {
+                    fragmentTransaction.setCustomAnimations(R.anim.slid_in_right, R.anim.slide_out_left);
+                } else {
+                    fragmentTransaction.setCustomAnimations(R.anim.slid_in_left, R.anim.slid_out_right);
+                }
+            }
+        }
         if(isAppInitialized){
             fragmentTransaction.add(R.id.frameLayout,fragment);
         }
         else {
             fragmentTransaction.replace(R.id.frameLayout,fragment);
         }
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }
-
+    private int getFragmentIndex(Fragment fragment) {
+        if (fragment instanceof HomeFragment) {
+            return 0;
+        } else if (fragment instanceof ActivityFragment) {
+            return 1;
+        } else if (fragment instanceof DashboardFragment) {
+            return 2;
+        } else if (fragment instanceof SettingFragment) {
+            return 3;
+        }
+        return -1;
+    }
+    //set Language of the app
     public void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
-
         Configuration config = new Configuration();
         config.locale = locale;
-
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

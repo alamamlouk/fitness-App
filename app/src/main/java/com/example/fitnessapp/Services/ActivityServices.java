@@ -91,6 +91,8 @@ public class ActivityServices {
         database.delete(TABLE_ACTIVITY_NAME, null, null);
         close();
     }
+
+    //this function will return the number of completed Activity
     public int getCompletedActivitiesCount() {
         String[] columns = {COLUMN_ACTIVITY_ID};
         String selection = COLUMN_ACTIVITY_PROGRESS + " = ?";
@@ -110,6 +112,9 @@ public class ActivityServices {
         }
         return completedActivitiesCount;
     }
+
+
+    //this function will return the  number of activity that the user start doing
     public int getActivitiesWithTimeExercisedGreaterThanZeroCount() {
         String[] columns = {COLUMN_ACTIVITY_ID};
         String selection = COLUMN_ACTIVITY_TIME_EXERCISED + " > ? AND "+COLUMN_ACTIVITY_PROGRESS+" =? ";
@@ -134,6 +139,7 @@ public class ActivityServices {
         return activitiesWithTimeExercisedGreaterThanZeroCount;
     }
 
+    // this function will return the sum of time exerisesed of all activity
     public int getSumOfTimeExercised() {
         String[] columns = {"SUM(" + COLUMN_ACTIVITY_TIME_EXERCISED + ")"};
         String selection = COLUMN_ACTIVITY_TIME_EXERCISED + " > ?";
@@ -156,11 +162,12 @@ public class ActivityServices {
         return sumOfTimeExercised;
     }
 
+    //this function will update the time exercised
     public void updateTimeExercised(long activityId, int timeToAdd) {
 
         int currentExercisedTime = getTimeExercisedForActivity(activityId);
 
-        // Calculate the new time exercised by adding the timeToAdd
+        // Calculate the new time exercised
         int newTimeExercised = currentExercisedTime + timeToAdd;
 
         ContentValues values = new ContentValues();
@@ -171,6 +178,8 @@ public class ActivityServices {
 
         database.update(TABLE_ACTIVITY_NAME, values, selection, selectionArgs);
     }
+
+    //this function will return the time exercised for a specific activity
     @SuppressLint("Range")
     public int getTimeExercisedForActivity(long activityId) {
 
@@ -191,7 +200,6 @@ public class ActivityServices {
         int timeExercised = 0;
 
         if (cursor != null && cursor.moveToFirst()) {
-            // Retrieve the current value of COLUMN_ACTIVITY_TIME_EXERCISED
             timeExercised = cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVITY_TIME_EXERCISED));
             cursor.close();
         }

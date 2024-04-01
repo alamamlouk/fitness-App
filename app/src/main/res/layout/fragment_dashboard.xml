@@ -87,7 +87,6 @@
             android:layout_height="400dp"
             android:layout_margin="10dp"
             android:visibility="visible"
-
             tools:context=".MapsActivity" />
         <ImageButton
             android:src="@drawable/gps1"

@@ -52,7 +52,7 @@ public class RelationServices {
         database.delete(TABLE_ACTIVITY_EXERCISE_RELATION, null, null);
         close();
     }
-
+    //add a new relation
     public void addRelation(long activity_id, long exercise_id) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_ACTIVITY_ID_FK, activity_id);
@@ -61,6 +61,7 @@ public class RelationServices {
         database.insert(TABLE_ACTIVITY_EXERCISE_RELATION, null, values);
     }
 
+    //this function return the exercises that belong to an activity
     @SuppressLint("Range")
     public List<Exercise> getExercisesByActivity(long activity_id) {
         List<Exercise> exercises = new ArrayList<>();
@@ -76,7 +77,7 @@ public class RelationServices {
 
         String selection = TABLE_ACTIVITY_EXERCISE_RELATION + "." + COLUMN_ACTIVITY_ID_FK + " = ?";
         String[] selectionArgs = {String.valueOf(activity_id)};
-
+        //A3malna join table
         String joinTable = EXERCISE_TABLE_NAME + " INNER JOIN " + TABLE_ACTIVITY_EXERCISE_RELATION +
                 " ON " + EXERCISE_TABLE_NAME + "." + COLUMN_EXERCISE_ID + " = " +
                 TABLE_ACTIVITY_EXERCISE_RELATION + "." + COLUMN_EXERCISE_ID_FK;
@@ -109,6 +110,7 @@ public class RelationServices {
         return exercises;
     }
 
+    // this function will update the exercice progress
     public void updateExerciseProgress(long activityId, long exerciseId, int newProgress) {
 
         ContentValues values = new ContentValues();
@@ -117,13 +119,19 @@ public class RelationServices {
         String selection = COLUMN_ACTIVITY_ID_FK + " = ? AND " + COLUMN_EXERCISE_ID_FK + " = ?";
         String[] selectionArgs = {String.valueOf(activityId), String.valueOf(exerciseId)};
 
-        database.update(TABLE_ACTIVITY_EXERCISE_RELATION, values, selection, selectionArgs);
-
+        database.update(
+                TABLE_ACTIVITY_EXERCISE_RELATION,
+                values,
+                selection,
+                selectionArgs);
+        //now we gonna check if all the exercise of that activity is finished
         if (areAllExercisesFinishedForActivity(activityId)) {
-            updateActivityProgress(activityId, 1);
+            //if all the exercised are finished we gonna update the activity progress and set it to done ;
+            updateActivityProgress(activityId);
         }
     }
 
+    //this function we get the exercise progress if it's finsihed or not
     @SuppressLint("Range")
     public int getExerciseProgress(long activityId, long exerciseId) {
 
@@ -149,6 +157,9 @@ public class RelationServices {
         }
         return exerciseProgress;
     }
+
+
+    //this function will return the number of exercise for an activity;
     public int getNumberOfExercisesForActivity(long activityId) {
         String[] columns = {COLUMN_EXERCISE_ID_FK};
         String selection = COLUMN_ACTIVITY_ID_FK + " = ?";
@@ -168,6 +179,8 @@ public class RelationServices {
         }
         return numberOfExercises;
     }
+
+    // this function will return the number of finished exercises for an activity
     public int getNumberOfFinishedExercises(long activityId) {
 
         String[] columns = {COLUMN_EXERCISE_ID_FK};
@@ -191,6 +204,8 @@ public class RelationServices {
         }
         return numberOfFinishedExercises;
     }
+
+    // this function will check if all the exercises of an activity are done ir not
     private boolean areAllExercisesFinishedForActivity(long activityId) {
 
         String[] columns = {COLUMN_EXERCISE_ID_FK};
@@ -214,37 +229,38 @@ public class RelationServices {
         return allExercisesFinished;
     }
 
-    private void updateActivityProgress(long activityId, int newProgress) {
+
+
+    //this function will update the activity and set it to done
+    private void updateActivityProgress(long activityId) {
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ACTIVITY_PROGRESS, newProgress);
+        values.put(COLUMN_ACTIVITY_PROGRESS, 1);
 
         String selection = COLUMN_ACTIVITY_ID + " = ?";
         String[] selectionArgs = {String.valueOf(activityId)};
 
-        database.update(TABLE_ACTIVITY_NAME, values, selection, selectionArgs);
+        database.update(
+                TABLE_ACTIVITY_NAME,
+                values,
+                selection,
+                selectionArgs);
 
 
     }
-
+    //this function update when the exercise on either it's monday ,sunday etc...
     public void setTimeFinishedIn(long activityId, long exercise) {
         ContentValues values = new ContentValues();
         Date finishedOn = new Date();
-        Log.d("TAG", "setTimeFinishedIn: " + finishedOn.getDay());
 
         values.put(COLUMN_FINISHED_TIME, finishedOn.getDay());
-        Log.d("testTime", "setTimeFinishedIn: " + new Date().getTime());
 
         String selection = COLUMN_ACTIVITY_ID_FK + " = ? AND " + COLUMN_EXERCISE_ID_FK + " = ? ";
         String[] selectionArgs = {String.valueOf(activityId), String.valueOf(exercise)};
-        int update = database.update(TABLE_ACTIVITY_EXERCISE_RELATION, values, selection, selectionArgs);
-        if (update > 0) {
-            Log.d("updated", "setTimeFinishedIn: updated");
-    } else {
-            Log.d("updated", "setTimeFinishedIn: no update");
-        }
-    }
+        database.update(TABLE_ACTIVITY_EXERCISE_RELATION, values, selection, selectionArgs);
 
+    }
+    //this function will retrieve for each day of the week the number of exercise finished;
     public List<ExerciseByDay> retrieveEachDaYFinishedExercised() {
         List<ExerciseByDay>exerciseByDays=new ArrayList<>();
         String query =

@@ -17,7 +17,6 @@ import com.example.fitnessapp.Entity.ExerciseDTO;
 
 public class ExerciseServices {
     private SQLiteDatabase database;
-
     private final DBHandler dbHandler;
 
     public ExerciseServices(Context context) {
@@ -29,6 +28,8 @@ public class ExerciseServices {
     public void close(){
         dbHandler.close();
     }
+
+    //this function will add an exercise
     public long addExercise(ExerciseDTO exerciseDTO) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_EXERCISE_NAME, exerciseDTO.getExercise_name());
@@ -38,6 +39,8 @@ public class ExerciseServices {
         values.put(COLUMN_EXERCISE_REPUTATION, exerciseDTO.getReputation());
         return database.insert(EXERCISE_TABLE_NAME, null, values);
     }
+
+    // this function will delete an exercise
     public void deleteExercises() {
         open();
         database.delete(EXERCISE_TABLE_NAME, null, null);

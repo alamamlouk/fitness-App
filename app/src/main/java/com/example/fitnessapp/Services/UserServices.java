@@ -25,6 +25,8 @@ public class UserServices {
     public UserServices(Context context) {
         this.dbHandler = new DBHandler(context);
     }
+
+    //Add  a user
     public void addUser(User user){
         ContentValues values=new ContentValues();
         values.put(COLUMN_USER_NAME, user.getUserName());
@@ -33,11 +35,15 @@ public class UserServices {
         values.put(COLUMN_USER_BMI, user.getUserBMI());
         database.insert(TABLE_USER_NAME,null,values);
     }
+
+    // delete user
     public void deleteUser() {
         open();
         database.delete(TABLE_USER_NAME, null, null);
         close();
     }
+
+    //return the user Details
     @SuppressLint("Range")
     public User getUserDetails() {
         User user = null;
@@ -78,6 +84,8 @@ public class UserServices {
     public void close() {
         dbHandler.close();
     }
+
+    //Update the user details
     public boolean updateUserDetails(User user) {
         boolean success;
 
@@ -86,7 +94,9 @@ public class UserServices {
         values.put(COLUMN_USER_WEIGHT, user.getUserWeight());
         values.put(COLUMN_USER_HEIGHT, user.getUserHeight());
         values.put(COLUMN_USER_BMI, user.getUserBMI());
+        //where user Id hethi
         String selection = COLUMN_USER_ID + " = ?";
+        //ou hethi bich it3awidh kil ?
         String[] selectionArgs = {String.valueOf(user.getUserId())};
 
         int rowsUpdated = database.update(
